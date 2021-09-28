@@ -1,12 +1,11 @@
 package pers.kaslufl.rpg.controller;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pers.kaslufl.rpg.model.entity.Character;
+import pers.kaslufl.rpg.model.repository.CharacterBadRequestException;
 import pers.kaslufl.rpg.model.repository.CharacterNotFoundException;
 import pers.kaslufl.rpg.model.repository.CharacterRepository;
 
@@ -33,6 +32,16 @@ public class CharacterController {
         }
         catch (EmptyResultDataAccessException e) {
             throw new CharacterNotFoundException();
+        }
+    }
+
+    @PostMapping
+    public Character create(@RequestBody Character character) throws Exception{
+        try {
+            return characterRepository.create(character);
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new CharacterBadRequestException();
         }
     }
 }

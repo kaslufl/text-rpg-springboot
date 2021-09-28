@@ -47,4 +47,27 @@ public class CharacterRepository {
 
         return character;
     }
+
+    public Character create(Character character) throws Exception{
+        int insert = jdbcTemplate.update(
+                "insert into character (idDiscord, name, background) values (?, ?, ?)",
+                character.getIdDiscord(),
+                character.getName(),
+                character.getBackground()
+        );
+
+        if (insert == 1) {
+            Long id = jdbcTemplate.queryForObject(
+                    "select max(c.id) from character c",
+                    Long.class
+            );
+
+            character.setId(id);
+            character.setEquipmentList(getEquipments(character.getId()));
+            character.updateStats();
+
+            return character;
+        }
+        throw new Exception("Character has not been created!");
+    }
 }
