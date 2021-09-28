@@ -1,9 +1,6 @@
 package pers.kaslufl.rpg.model.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import pers.kaslufl.rpg.model.entity.Character;
 import pers.kaslufl.rpg.model.entity.Equipment;
 
