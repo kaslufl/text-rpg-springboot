@@ -1,6 +1,9 @@
 package pers.kaslufl.rpg.model.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import pers.kaslufl.rpg.model.entity.Character;
 import pers.kaslufl.rpg.model.entity.Equipment;
 
@@ -15,8 +18,8 @@ public class CharacterRepository {
 
     public List<Equipment> getEquipments(Long id) {
         return jdbcTemplate.query(
-                "select e.* from equipment e inner join equipmentCharacter qc on qc.equipmentId = e.id " +
-                        "where qc.characterId = ?",
+                "select e.* from equipment e inner join equipmentCharacter ec on ec.equipmentId = e.id " +
+                        "where ec.characterId = ?",
                 new EquipmentMapper(),
                 id
         );
@@ -69,5 +72,33 @@ public class CharacterRepository {
             return character;
         }
         throw new Exception("Character has not been created!");
+    }
+
+
+    public Character update(Character character) {
+        jdbcTemplate.update(
+                "update character set idDiscord = ?, name = ?, background = ? where id = ?",
+                character.getIdDiscord(),
+                character.getName(),
+                character.getBackground(),
+                character.getId()
+        );
+
+        character.setEquipmentList(getEquipments(character.getId()));
+        character.updateStats();
+        return character;
+    }
+
+    public void delete(Long id) {
+        jdbcTemplate.update(
+                "delete from equipmentCharacter where characterId = ?",
+                id
+        );
+
+        jdbcTemplate.update(
+                "delete from character where id = ?",
+                id
+        );
+
     }
 }
