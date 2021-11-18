@@ -21,11 +21,13 @@ public class CharacterController {
         this.characterRepository = new CharacterRepository(jdbcTemplate);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000/")
     @GetMapping
     public List<Character> search() {
         return characterRepository.search();
     }
 
+    @CrossOrigin(origins = "http://localhost:3000/")
     @GetMapping("/{id}")
     public Character search(@PathVariable Long id) {
         try {
@@ -36,6 +38,7 @@ public class CharacterController {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:3000/")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Character create(@RequestBody Character character) throws Exception{
@@ -47,7 +50,7 @@ public class CharacterController {
         }
     }
 
-
+    @CrossOrigin(origins = "http://localhost:3000/")
     @PutMapping("/{id}")
     public Character update(@RequestBody Character character, @PathVariable Long id) {
         Character oldCharacter = characterRepository.search(id);
@@ -60,6 +63,7 @@ public class CharacterController {
         throw new CharacterNotFoundException();
     }
 
+    @CrossOrigin(origins = "http://localhost:3000/")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
